@@ -1,0 +1,13 @@
+c3f0ae9b-79fe-4075-83c1-417d0a0a6db3:1750954574953:164:S:CREATE TABLE Customers (\n    CustomerID     NUMBER PRIMARY KEY,\n    Name           VARCHAR2(100),\n    Age            NUMBER,\n    Balance        NUMBER(10,2),\n    InterestRate   NUMBER(5,2),\n    IsVIP          VARCHAR2(5) DEFAULT 'FALSE'\n);
+d8b83335-5ebc-4a39-8c25-222c114aabf2:1750954575607:42:S:CREATE TABLE Loans (\n    LoanID         NUMBER PRIMARY KEY,\n    CustomerID     NUMBER,\n    DueDate        DATE,\n    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)\n);
+93a612ea-8497-41d1-ac23-e3d61a11111c:1750954642820:13:S:INSERT INTO Customers VALUES (1, 'Ravi Kumar', 65, 8000, 10.5, 'FALSE');
+80df7a35-2ec8-49b8-b045-bc94f41bf344:1750954642918:6:S:INSERT INTO Customers VALUES (2, 'Anita Sharma', 59, 15000, 9.8, 'FALSE');
+75657d0b-5b1f-4cb2-b273-240dd3400921:1750954643003:4:S:INSERT INTO Customers VALUES (3, 'Vikram Sen', 70, 5000, 11.2, 'FALSE');
+2e32c4f1-860d-4001-8fd9-f0ff80a64270:1750954643087:5:S:INSERT INTO Customers VALUES (4, 'Meena Das', 45, 12000, 10.0, 'FALSE');
+174d8ebf-cea3-4946-85b4-09e359a560f0:1750954643247:7:S:INSERT INTO Loans VALUES (101, 1, SYSDATE + 10); -- Due in 10 days
+5e8e5fb9-a2ed-44f4-88ac-9f36725f05aa:1750954643334:3:S:INSERT INTO Loans VALUES (102, 2, SYSDATE + 40); -- Due after 40 days
+ebd269c5-a8a2-46bb-83e1-78aedb44d6ac:1750954643430:3:S:INSERT INTO Loans VALUES (103, 3, SYSDATE + 5);  -- Due in 5 days
+8d7fdc3c-b48a-47ed-89a7-8e410e71d293:1750954643531:4:S:INSERT INTO Loans VALUES (104, 4, SYSDATE + 25); -- Due in 25 days
+eceb54b7-069b-43b9-893d-23ed16a6bdfa:1750954643623:8:S:COMMIT;
+697800a3-44ea-4bb8-a515-4ada3cb8099e:1750954807556:0:S:SET SERVEROUTPUT ON;
+9165b8b0-72b9-4db6-bf75-06f42c276676:1750954808584:16:S:BEGIN\n    FOR cust_rec IN (\n        SELECT CustomerID, InterestRate\n        FROM Customers\n        WHERE Age > 60\n    ) LOOP\n        UPDATE Customers\n        SET InterestRate = InterestRate - 1\n        WHERE CustomerID = cust_rec.CustomerID;\n\n        DBMS_OUTPUT.PUT_LINE('Discount applied to Customer ID: ' || cust_rec.CustomerID);\n    END LOOP;\nEND;\n/
